@@ -36,7 +36,7 @@ def user_guess():
         while True:
             guess_try = str(chk_in('попытка №' + str(tries_count + 1) + ': '))
             while len(guess_try) < 4:
-                guess_try += '0'
+                guess_try = '0' + guess_try
             tries_count += 1
             ans = bk(list(num_2_guess), list(guess_try))
             if ans[0] < 4:

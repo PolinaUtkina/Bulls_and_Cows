@@ -12,8 +12,6 @@ def chk_in(text):
 
 # определение количества быков и коров в паре чисел
 def bk(number_2_guess, guess_try):
-    number_2_guess = str(number_2_guess)
-    guess_try = str(guess_try)
     b = 0 # количество быков
     k = 0 # количество коров
     common = set(number_2_guess) & set(guess_try) # находим пересечение множества цифр загаданного числа и введенного
@@ -36,9 +34,11 @@ def user_guess():
 
         tries_count = 0
         while True:
-            guess_try = chk_in('попытка №' + str(tries_count + 1) + ': ')
+            guess_try = str(chk_in('попытка №' + str(tries_count + 1) + ': '))
+            while len(guess_try) < 4:
+                guess_try += '0'
             tries_count += 1
-            ans = bk(num_2_guess, guess_try)
+            ans = bk(list(num_2_guess), list(guess_try))
             if ans[0] < 4:
                 print('Быков: ', ans[0], ', коров: ', ans[1])
             elif ans[0] == 4:
@@ -89,12 +89,13 @@ for i in range(123, 9877):
     for j in str(i):
         a.append(j)
     if len(a) == len(set(a)):
-            combinations.append(tuple(a))
+        combinations.append(tuple(a))
 
 # НАЧАЛО ИГРЫ
 # небольшое приветствие для игрока
 print('Это игра БЫКИ И КОРОВЫ! Кто готов напрячь мозги и повеселиться?')
 print('* * * * *')
+
 # правила игры
 print('Немного о сути и ходе игры')
 
@@ -139,16 +140,23 @@ for i in range(number_rounds):
         print('Первый ход достаётся игроку', username)
         fs_u = user_guess() # число ходов, за которое задуманное число отгадано игроком
         fs_c = comp_guess() # число ходов, за которое задуманное число отгадано компьютером
+        while fs_c == 0:
+            if input('Давайте переиграем? Д/Н ').lower() == 'д':
+                fs_c = comp_guess()
+            else:
+                print('Жаль, но тогда победа за компьютером...')
+                break
     if first_turn == '2':
         print('Первый ход достаётся компьютеру')
         fs_c = comp_guess() # число ходов, за которое задуманное число отгадано компьютером
+        while fs_c == 0:
+            if input('Давайте переиграем? Д/Н ').lower() == 'д':
+                fs_c = comp_guess()
+            else:
+                print('Жаль, но тогда победа за компьютером...')
+                break
         fs_u = user_guess() # число ходов, за которое задуманное число отгадано игроком
-    while fs_c == 0:
-        if input('Давайте переиграем? Д/Н ').lower() == 'д':
-            fs_c = comp_guess()
-        else:
-            print('Жаль, но тогда победа за компьютером...')
-            break
+    
     print('Вы угадали число за ', fs_u, 'ходов.', 'Компьютер угадал число за', fs_c, 'ходов')
     	#начинаем считать победы за раунд
     if fs_c > fs_u:
@@ -169,3 +177,4 @@ if win_user < win_computer:
     print('Победа компьютера!', username, ', не расстраивайтесь! Всё ещё впереди!')
 if win_user == win_computer:
     print('Ничья! Искусственному интеллекту довольно тяжело тягаться с Вами!')
+
